@@ -17,7 +17,7 @@ The repo mainly requires the following packages.
 + sympy==1.14.0
 + torch==2.3.1+cu118
 + torchdata==0.7.1
-+ 
+
 
 
 
