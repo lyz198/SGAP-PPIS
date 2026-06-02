@@ -8,7 +8,7 @@ from torch.autograd import Variable
 from torch.utils.data import DataLoader
 from sklearn import metrics
 
-from ppis_core.sgha_ppis_model import *
+from ppis_core.sgap_ppis_model import *
 
 
 PROJECT_DIR = Path(__file__).resolve().parent
@@ -50,10 +50,10 @@ def resolve_model_path():
     model_path = os.path.join(default_log_dir, latest, "model")
     if not os.path.isdir(model_path):
         raise FileNotFoundError(f"Model directory not found: {model_path}")
-   
-    return model_path
+    #return model_path
+    return "/home/zhuenqiang_2/HHGA-PPISj/Log100_2/seed100/model"
  
-    #return  "/home/zhuenqiang_2/HHGA-PPIS/HHGA-PPIS/Log/2026-03-07-01-48-42/model"
+    
   
 
 Model_Path = None
@@ -194,7 +194,7 @@ def test(test_dataframe, psepos_path):
             f"H1={arch['hidden_dim1']}, H2={arch['hidden_dim2']}, "
             f"APPNP={arch['appnp_layers']}, EGNN={arch['egnn_layers']}",
         )
-        model = SGHAPPIS(
+        model = SGAPPIS(
             INPUT_DIM,
             arch["hidden_dim1"],
             arch["hidden_dim2"],

@@ -9,7 +9,7 @@ from torch.autograd import Variable
 from torch.utils.data import DataLoader
 from sklearn import metrics
 from sklearn.model_selection import KFold
-from ppis_core.sgha_ppis_model import *
+from ppis_core.sgap_ppis_model import *
 
 
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -159,8 +159,7 @@ def analysis(y_true, y_pred, best_threshold=None):
 
 
 def train(model, train_dataframe, valid_dataframe, fold=0):
-     #  4. 记录全量训练开始时间
-    start_time = time.time()
+     
     train_loader = DataLoader(
         dataset=ProDataset(train_dataframe),
         batch_size=BATCH_SIZE,
@@ -209,9 +208,8 @@ def train(model, train_dataframe, valid_dataframe, fold=0):
             torch.save(model.state_dict(), os.path.join(Model_Path, 'Fold' + str(fold) + '_best_model.pkl'))
 
         model.scheduler.step(result_valid['AUPRC'])
-    #  2. 计算并打印当前 Fold 的总训练时长
-    end_time = time.time()
-    print(f"\n========== Fold {fold} Training Time: {end_time - start_time:.2f} seconds ==========")
+   
+    
 
     if best_result is None:
         return 0, 0.5, 0.0
@@ -227,7 +225,7 @@ def cross_validation(all_dataframe, fold_number=5):
     print("Feature dim:", INPUT_DIM)
     print("Hidden dim1:", HIDDEN_DIM1)
     print("Hidden dim2:", HIDDEN_DIM2)
-    print("Total layers (stack blocks): N/A (MGMA-style single block)")
+    print("Total layers (stack blocks): N/A (SGAP-style single block)")
     print("APPNP branch layers (replacing EGAT):", APPNP_LAYER)
     print("EGNN layers:", EGNN_LAYER)
     print("Hybrid layers:", "N/A")
@@ -259,10 +257,9 @@ def cross_validation(all_dataframe, fold_number=5):
             "samples",
         )
 
-        model = SGHAPPIS(INPUT_DIM, HIDDEN_DIM1, HIDDEN_DIM2, NUM_CLASSES, DROPOUT, LAMBDA, ALPHA)
-        #  3. 统计并打印模型的参数量
-        total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
-        print(f"========== Model Parameters: {total_params:,} ==========")
+        model = SGAPPIS(INPUT_DIM, HIDDEN_DIM1, HIDDEN_DIM2, NUM_CLASSES, DROPOUT, LAMBDA, ALPHA)
+        
+        
         if torch.cuda.is_available():
             model.cuda()
 
@@ -279,11 +276,10 @@ def cross_validation(all_dataframe, fold_number=5):
 
 
 def train_full_model(all_dataframe, aver_epoch):
-    #  4. 记录全量训练开始时间
-    start_time = time.time()
+
     print("\n\nTraining a full model using all training data...\n")
-    model = SGHAPPIS(INPUT_DIM, HIDDEN_DIM1, HIDDEN_DIM2, NUM_CLASSES, DROPOUT, LAMBDA, ALPHA)
-    # 🌟 5. 统计并打印全量训练时的模型参数量
+    model = SGAPPIS(INPUT_DIM, HIDDEN_DIM1, HIDDEN_DIM2, NUM_CLASSES, DROPOUT, LAMBDA, ALPHA)
+  
     total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
     print(f"========== Full Model Parameters: {total_params:,} ==========")
     if torch.cuda.is_available():
@@ -318,9 +314,8 @@ def train_full_model(all_dataframe, aver_epoch):
 
         if (epoch + 1) in snapshot_epochs:
             torch.save(model.state_dict(), os.path.join(Model_Path, f'Full_model_{epoch + 1}.pkl'))
-        # 🌟 6. 计算并打印全量模型的总训练时长
-    end_time = time.time()
-    print(f"\n========== Full Model Training Time: {end_time - start_time:.2f} seconds ==========")
+        
+    
 
 
 class Logger(object):
