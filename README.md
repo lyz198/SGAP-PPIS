@@ -18,6 +18,21 @@ The repo mainly requires the following packages.
 + torch==2.3.1+cu118
 + torchdata==0.7.1
 
+## ⚡ Quick Start
+
+### Evaluate with the provided checkpoint
+
+To evaluate the pre-trained model on the test set, run:
+```bash
+python test.py
+```
+
+### Train from scratch
+
+To train a new model from scratch using the default configuration, run:
+```bash
+python train.py
+```
 
 
 
