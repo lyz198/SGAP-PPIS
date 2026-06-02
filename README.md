@@ -9,3 +9,15 @@ guidance, and multi-step propagation-state representation jointly drive these im
 ## Preparation
 ### Environment Setup
 The repo mainly requires the following packages.
++ dgl==2.4.0+cu118
++ numpy==1.26.4
++ pandas==2.2.3
++ scikit-learn==1.5.2
++ scipy==1.15.3
++ sympy==1.14.0
++ torch==2.3.1+cu118
++ torchdata==0.7.1
++ 
+
+
+
